@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Simply Rugby</title>
+    <!-- 1. 用你本地文件，避免 CDN 404 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- 与 login.html 同级，所以 ./css/... -->
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style>
+        body{min-height:100vh;display:flex;align-items:center;background:#121212}
+        .card{width:100%;max-width:400px;margin:auto}
+    </style>
+</head>
+<body>
+<div class="card shadow">
+    <div class="card-body p-4">
+        <h4 class="mb-3 text-center">Login</h4>
+        <form id="loginForm" novalidate>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+    </div>
+</div>
+
+<!-- 2. 脚本顺序：jQuery → Bootstrap → 自己 -->
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script>
+    $('#loginForm').on('submit', function (e) {
+        e.preventDefault();
+        if (!this.checkValidity()) return;   // 简单验证
+
+        $.ajax({
+            url: 'http://localhost:8000/user/login',
+            type: 'POST',
+            data: {
+                email: $('#email').val().trim(),
+                password: $('#password').val().trim()
+            },
+            success: function (res) {
+                if (res === 'success') {
+                    location.href = 'home.html';   // 登录成功跳转
+                } else {
+                    alert('账号或密码错误');
+                }
+            },
+            error: function () {
+                alert('网络错误');
+            }
+        });
+    });
+</script>
+</body>
+</html>
